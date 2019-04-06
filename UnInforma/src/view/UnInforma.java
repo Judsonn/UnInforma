@@ -15,7 +15,11 @@ public class UnInforma {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+
+        //loop infinito pode ser alterado por algum timer de intervalo curto
+        while (true) {
+        }
     }
-    
+
 }
