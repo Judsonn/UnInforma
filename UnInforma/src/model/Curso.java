@@ -10,5 +10,7 @@ package model;
  * @author Sabrina Winckler
  */
 public class Curso {
-    
+    public void test(){  
+    System.out.println("chegou");
+    }
 }
