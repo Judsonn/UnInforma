@@ -29,13 +29,13 @@ public class UnInforma {
         String opcao;
         Scanner op = new Scanner(System.in);
         do {
-            System.out.println("   ====================================================");
+            System.out.println("   =======================================================================================");
             System.out.println("\n              ### BEM VINDO A UNINFORMA###");
             System.out.println("    |      /projeto -> Pesquisa e retorna todos os projetos existentes na universidade  |\n"
                     +          "    |                  separando-os por seu tipo (pesquisa, extensão e ensino).         |");
             System.out.println("    |      /cursos ->  pesquisa e retorna os cursos disponíveis em cada campus campus   |");
             System.out.println("    |     voltar                                                                        |");
-            System.out.println("     ========================= =========================\n");
+            System.out.println("     =====================================================================================\n");
             opcao = op.next();
             switch (opcao) {
                 
@@ -62,12 +62,12 @@ public class UnInforma {
         Scanner c = new Scanner(System.in);
 
         do {
-            System.out.println("   ====================================================");
+            System.out.println("   ===========================================================");
             System.out.println("\n              ### BEM VINDO A UNINFORMA###");
             System.out.println("    | Digite /comandos para listar os comandos disponiveis |\n"
                     +          "    |         ou digite sair para finalizar o programa     |");
             System.out.println("    |     sair                                             |");
-            System.out.println("     ========================= =========================\n");
+            System.out.println("     ========================= ================================\n");
 
             comandos = c.next();
             switch (comandos) {
