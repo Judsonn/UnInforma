@@ -19,6 +19,7 @@ public class Teste {
         ClienteHttp cliente = new ClienteHttp();
         try {
             cliente.criarConexaoSocket();
+            cliente.requisitar();
         } catch (IOException ex) {
             Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
         }

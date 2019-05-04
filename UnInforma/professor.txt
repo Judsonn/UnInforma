@@ -1,0 +1,7 @@
+requisão http para o arquivo
+colocar no xamp o arquivo e wget
+
+uma planilha só 
+
+exportar para json ou xml
+interar linha por linha para mostrar faer split para divirdir por colunas
