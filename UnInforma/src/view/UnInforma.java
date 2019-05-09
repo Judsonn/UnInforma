@@ -30,7 +30,7 @@ public class UnInforma {
         Scanner op = new Scanner(System.in);
         do {
             System.out.println("   =======================================================================================");
-            System.out.println("\n              ### BEM VINDO A UNINFORMA###");
+            System.out.println("\n         /comandos para listar os comandos disponiveis");
             System.out.println("    |      /projeto -> Pesquisa e retorna todos os projetos existentes na universidade  |\n"
                     +          "    |                  separando-os por seu tipo (pesquisa, extensão e ensino).         |");
             System.out.println("    |      /cursos ->  pesquisa e retorna os cursos disponíveis em cada campus campus   |");
@@ -38,7 +38,9 @@ public class UnInforma {
             System.out.println("     =====================================================================================\n");
             opcao = op.next();
             switch (opcao) {
-                
+                case "/comandos":
+                    menu();
+                    break;
                 case "/universidade":
                     System.out.println("instanciar classe universidade");
                     break;
