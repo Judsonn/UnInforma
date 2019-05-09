@@ -16,10 +16,14 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.parsers.ParserConfigurationException;
 import model.Projeto;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -42,45 +46,23 @@ public class ClienteHttp {
     
     public void criarConexaoSocket() throws IOException{
         //URL do site que será consultado
-        //this.url = new URL("https://spreadsheets.google.com/feeds/list/1-tA1_e8ePTrBOFSkIGym6C26mW2PZCZfinE5CHV38P4/1/public/values?alt=json");
-       
-        
-        this.client = new Socket(url.toString(), 80);
+        //this.url = new URL("https://spreadsheets.google.com/feeds/list/1-tA1_e8ePTrBOFSkIGym6C26mW2PZCZfinE5CHV38P4/1/public/values");
+        this.url = new URL("http://localhost/uniforma/");
+        this.client = new Socket(url.getHost(), 80);
         
     }
     
-    public void requisitar() throws IOException{
+    public void requisitarProjeto() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException{
 
-        String g = "https://spreadsheets.google.com/feeds/list/1-tA1_e8ePTrBOFSkIGym6C26mW2PZCZfinE5CHV38P4/1/public/values?alt=json";
-        String get = "GET" + g + "HTTP/1.1\n";
-        //get += "Host " + url.getHost() + "\n\n";
+        String arquivo = "teste.csv";
+        String get = "GET" + this.url.getPath() + arquivo + "HTTP/1.1\n";
+        get += "Host " + url.getHost() + "\n\n";
         
-        ObjectOutputStream saida = new ObjectOutputStream(this.client.getOutputStream());
-        Projeto p = new Projeto(" ");
-        saida.writeObject(p);
-        
-        System.out.println(saida.toString());
-        System.out.println(p.toString());
-        
-        
-        PrintWriter s_out = null;
-	BufferedReader s_in = null;
-        s_out = new PrintWriter(this.client.getOutputStream(), true);
-        
-        s_in = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
-       
-        //Get response from server
-        System.out.println(s_out.toString());
-        System.out.println(p.toString());
-        System.out.println(s_in.toString());
-        System.out.println(s_in.readLine());
-	String response;
-	while ((response = s_in.readLine()) != null) 
-	{
-		System.out.println( response );
-	}
-       
+        System.out.println(this.url.getFile() + " \n" + get);
 
+        Leitor.carregarArquivo(this.url.toString() + arquivo);
+        Leitor.montarLista();
+        
     }
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     CONEXÃO UTILIZANDO HttpUrlConection  //
@@ -98,16 +80,4 @@ public class ClienteHttp {
         conexao.setRequestMethod("GET");
     }
 
-    public void definirParametroHttp(String parametro) throws IOException {
-        //Para adicionar parametros ao request, setar true na propriedade doOutput
-        //Escrever a String param1=value&param2=value no OutputStream da instancia de HttpUrlConnection
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("param1", "val");
-        conexao.setDoOutput(true);
-        DataOutputStream out = new DataOutputStream(conexao.getOutputStream());
-        out.writeBytes(ParametroBuilder.getParamsString(parameters));
-        out.flush();
-        out.close();
-
-    }
 }
