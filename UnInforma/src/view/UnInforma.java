@@ -6,6 +6,7 @@
 package view;
 
 import controller.ClienteHttp;
+import enumerator.CAMPUS;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -88,7 +89,7 @@ public class UnInforma {
             System.out.println("    |      /cursos_em <campus> ->  pesquisa e retorna os cursos disponíveis no campus    |\n"
                     +          "    |                              passado como parâmetro.                              |");
             System.out.println("    |      /comandos -> lista os comandos disponiveis                                   |");
-            System.out.println("    |      /sair -> para encerrar o programa                                            |");
+            System.out.println("    |      /voltar -> para voltar ao menu inicial                                        |");
             System.out.println("     =====================================================================================\n");
             opcao = op.next();
             switch (opcao) {
@@ -99,15 +100,17 @@ public class UnInforma {
                     System.out.println(cliente.dividirPorArea());
                     break;
                 case "/cursos_em":
+                    System.out.println("\n Os campus existentes são: " + CAMPUS.values().toString());
                     System.out.println("\n Digite o campus que deseja consultar: ");
                     curso = cur.next();
+                    System.out.println(cliente.mostrarCursos(curso.toLowerCase()));
                     break;
-                    case"/sair":
+                    case"/voltar":
                     break;
                 default:
                     System.out.println("Opcao invalida !!!");
             }
-        } while (!opcao.equals("/sair"));
+        } while (!opcao.equals("/voltar"));
       
     }
 

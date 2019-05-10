@@ -21,19 +21,6 @@ import org.xml.sax.SAXException;
 public class Teste {
     public static void main(String args[]){
         ClienteHttp cliente = new ClienteHttp();
-        try {
-            String param = "AleGrete";
-            System.out.println(cliente.mostrarCursos(param.toLowerCase()));
-        } catch (IOException ex) {
-            Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
 }
