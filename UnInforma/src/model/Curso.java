@@ -14,6 +14,7 @@ import enumerator.MODALIDADE;
  * @author Sabrina Winckler
  */
 public class Curso {
+
     private String nome;
     private String turno;
     private float qntSemestre;
@@ -34,7 +35,7 @@ public class Curso {
     public void setCampus(CAMPUS campus) {
         this.campus = campus;
     }
-    
+
     public String getNome() {
         return nome;
     }
@@ -69,9 +70,13 @@ public class Curso {
 
     @Override
     public String toString() {
-        return "Curso:" + "Nome: " + nome + "\n Turno=" + turno + "\n Quantidade de Semestre=" + qntSemestre + "\n Carga Horária Total=" + chTotal + "\n\n";
+        return  "Nome: " + nome + 
+                "\n Turno: " + turno + 
+                "\n Quantidade de Semestre: " + qntSemestre + " semestres " +
+                "\n Carga Horária Total: "+ chTotal + " horas "+
+                "\n Grua: " + grua.name() + " em " + nome +
+                "\n Modalidade: " + modalidade.name() +
+                "\n\n";
     }
-    
- 
-    
+
 }

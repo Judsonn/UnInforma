@@ -23,7 +23,6 @@ public class Teste {
         ClienteHttp cliente = new ClienteHttp();
         try {
             String param = "AleGrete";
-            //System.out.println(cliente.dividirPorArea());
             System.out.println(cliente.mostrarCursos(param.toLowerCase()));
         } catch (IOException ex) {
             Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
