@@ -113,6 +113,19 @@ public class ClienteHttp {
         //Leitor.montarLista();
 
     }
+    public void requisitarCurso() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException{
+
+        String arquivo = "teste.csv";
+        String get = "GET" + this.url.getPath() + arquivo + "HTTP/1.1\n";
+        get += "Host " + url.getHost() + "\n\n";
+        
+        System.out.println(this.url.getFile() + " \n" + get);
+
+        Leitor.carregarArquivo(this.url.toString() + arquivo);
+        Leitor.montarLista();
+        
+    }
+    
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     CONEXÃO UTILIZANDO HttpUrlConection  //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
