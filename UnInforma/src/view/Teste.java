@@ -22,8 +22,9 @@ public class Teste {
     public static void main(String args[]){
         ClienteHttp cliente = new ClienteHttp();
         try {
-            cliente.criarConexaoSocket();
-            cliente.requisitarProjeto();
+            String param = "AleGrete";
+            //System.out.println(cliente.dividirPorArea());
+            System.out.println(cliente.mostrarCursos(param.toLowerCase()));
         } catch (IOException ex) {
             Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {

@@ -5,6 +5,7 @@
  */
 package model;
 
+import enumerator.AREA;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,6 +19,7 @@ public class Projeto implements Serializable{
     private String descricao;
     private String coordenador;
     private String validade;
+    private AREA area;
 
     public Projeto() {
     }
@@ -27,6 +29,10 @@ public class Projeto implements Serializable{
         this.descricao = descricao;
         this.coordenador = coordenador;
         this.validade = validade;
+    }
+
+    public void setArea(String area) {
+        this.area = AREA.valueOf(area.toUpperCase());
     }
 
     public void setCampus(String campus) {
@@ -43,6 +49,10 @@ public class Projeto implements Serializable{
 
     public void setCoordenador(String coordenador) {
         this.coordenador = coordenador;
+    }
+
+    public AREA getArea() {
+        return area;
     }
 
     public String getCampus() {
@@ -63,7 +73,7 @@ public class Projeto implements Serializable{
 
     @Override
     public String toString() {
-        return "Projeto{" + "campus=" + campus + ", descricao=" + descricao + ", coordenador=" + coordenador + '}';
+        return "Projeto: " + "Campus: " + campus + "\n Descricao=" + descricao + "\n Coordenador=" + coordenador + " \n Validade: "+ validade +" \n\n";
     }
     
     
