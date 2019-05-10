@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -32,64 +34,51 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author Lucas
+ * @author Sabrina Winckler
  */
 public class Leitor {
 
-    private static File arquivo;
     private static int quantidadeProjetos;
+    private static String cabecalho;
 
-    public static File carregarArquivo(String caminho) throws ParserConfigurationException, SAXException, IOException {
-        
-        arquivo =  new File(caminho);
-        
-       // DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    public static ArrayList montarListaProjeto(BufferedReader br) throws ParseException, IOException {
 
-       // dbf.setNamespaceAware(false);
-
-       // DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-
-       // Document doc = docBuilder.parse(arquivo);
-        
-        return arquivo;
-    }
-
-    public static ArrayList montarLista() throws ParseException {
-        
+        //Criando variáveis locais para os atributos de Projeto
         String campus;
         String desc;
         String coord;
         String val;
-        //DateFormat formatter = new SimpleDateFormat("MM/dd/yy");
         Projeto p;
-        
+
+        //Variáveis para manipular o array recebido do servidor
         String[] projetoStringArray;
         String projetoString;
-        
+
+        //Variável para a lista de projetos que é inicialmente vazia
         ArrayList<Projeto> listaProjetos = new ArrayList();
-        FileReader reader;
-        BufferedReader br;
 
-        try {
-            reader = new FileReader(arquivo);
-            br = new BufferedReader(reader);
-            while ((projetoString = br.readLine()) != null) {
-                projetoStringArray = projetoString.split(",");
+        //Identifica cabeçalho da requisição e armazena no atributo
+        for(int i=0; i<9;i++){
+            cabecalho = br.readLine() + " \n";
+        }
+       
+        //Enquanto a linha não for nula, ele lê cada linha com as informações do projeto
+        while ((projetoString = br.readLine()) != null) {
+            //Define split do csv
+            projetoStringArray = projetoString.split(",");
+            
+            //Aramzena valores do vetor nas variáveis locais que correspondem aos atributos
+            campus = projetoStringArray[0];
+            desc = projetoStringArray[1];
+            coord = projetoStringArray[2];
+            val = projetoStringArray[3];
 
-                campus = projetoStringArray[0];
-                desc = projetoStringArray[1];
-                coord = projetoStringArray[2];
-                val = projetoStringArray[3];
-
-                p = new Projeto(campus, desc, coord, val);
-                listaProjetos.add(new Projeto(campus, desc, coord, val));
-                
-                System.out.println(p.toString());
-
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(Leitor.class.getName()).log(Level.SEVERE, null, ex);
+            //Cria projeto
+            p = new Projeto(campus, desc, coord, val);
+            
+            //Adiciona na lista de projetos
+            listaProjetos.add(p);
+            
         }
 
         Leitor.quantidadeProjetos = listaProjetos.size();
@@ -101,4 +90,8 @@ public class Leitor {
         return quantidadeProjetos;
     }
 
+    public static String getCabecalho() {
+        return cabecalho;
+    }
+    
 }
