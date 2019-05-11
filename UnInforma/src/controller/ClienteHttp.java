@@ -106,7 +106,7 @@ public class ClienteHttp {
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     public void requisitarProjeto(String areaproj) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         //Define arquivo que será consultado
-        String arquivo = "teste" + areaproj + ".csv";
+        String arquivo = "projeto" + areaproj + ".csv";
         //Limpa lista de projetos caso haja algum registro
         this.listaProjetos.removeAll(listaProjetos);
         //Chama método que monta a lista de projetos e adiciona na lista de projetos a partir da resposta da requisição

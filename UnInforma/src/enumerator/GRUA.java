@@ -10,5 +10,5 @@ package enumerator;
  * @author Sabrina Winckler
  */
 public enum GRUA {
-    BACHAREL, LICENCIATURA;
+    BACHAREL, LICENCIATURA, TECNÓLOGO, ESPECIALISTA, MESTRE, MESTRADO, DOUTORADO ;
 }
