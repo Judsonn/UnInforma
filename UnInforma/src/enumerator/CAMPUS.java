@@ -10,7 +10,7 @@ package enumerator;
  * @author Sabrina Winckler
  */
 public enum CAMPUS {
-    ALEGRETE, BAGE, CACAPAVADOSUL, DOMPEDRITO, ITAQUI, JAGUARAO, LIVRAMENTO, SAOBORJA, SAOGABRIEL, URUGUAIANA, TODOS;
+    ALEGRETE, BAGE, CACAPAVADOSUL, DOMPEDRITO, ITAQUI, JAGUARAO, LIVRAMENTO, SAOBORJA, SAOGABRIEL, URUGUAIANA;
     
     public static boolean exists(String campus){
         for (CAMPUS value : CAMPUS.values()) {
@@ -22,7 +22,7 @@ public enum CAMPUS {
     }
     
     public static String stringCAMPUS(){
-        String campus = "ALEGRETE, BAGE, CACAPAVADOSUL, DOMPEDRITO, ITAQUI, JAGUARAO, LIVRAMENTO, SAOBORJA, SAOGABRIEL, URUGUAIANA, TODOS";
+        String campus = "ALEGRETE, BAGE, CACAPAVADOSUL, DOMPEDRITO, ITAQUI, JAGUARAO, LIVRAMENTO, SAOBORJA, SAOGABRIEL, URUGUAIANA";
         return campus;
     }
 }
