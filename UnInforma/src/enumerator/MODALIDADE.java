@@ -10,5 +10,5 @@ package enumerator;
  * @author Sabrina Winckler
  */
 public enum MODALIDADE {
-    PRESENCIAL, EAD;
+    PRESENCIAL, EAD, UAB;
 }
