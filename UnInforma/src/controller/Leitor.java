@@ -26,7 +26,14 @@ public class Leitor {
     private static int quantidadeProjetos;
     private static int quantidadeCursos;
     private static String cabecalho;
-
+/**
+ * 
+ * @param br
+ * @param areaProj
+ * @return
+ * @throws ParseException
+ * @throws IOException 
+ */
     public static ArrayList montarListaProjeto(BufferedReader br, String areaProj) throws ParseException, IOException {
 
         //Criando variáveis locais para os atributos de Projeto
@@ -71,7 +78,14 @@ public class Leitor {
 
         return listaProjetos;
     }
-
+/**
+ * 
+ * @param br
+ * @param campus
+ * @return
+ * @throws ParseException
+ * @throws IOException 
+ */
     public static ArrayList montarListaCurso(BufferedReader br, String campus) throws ParseException, IOException {
 
         //Criando variáveis locais para os atributos de Projeto

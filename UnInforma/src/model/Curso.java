@@ -22,7 +22,15 @@ public class Curso {
     private CAMPUS campus;
     private GRUA grua;
     private MODALIDADE modalidade;
-
+/**
+ * 
+ * @param nome
+ * @param turno
+ * @param qntSemestre
+ * @param chTotal
+ * @param mod
+ * @param grua 
+ */
     public Curso(String nome, String turno, float qntSemestre, double chTotal, MODALIDADE mod, GRUA grua) {
         this.nome = nome;
         this.turno = turno;

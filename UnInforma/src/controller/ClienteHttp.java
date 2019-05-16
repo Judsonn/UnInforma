@@ -7,38 +7,23 @@ package controller;
 
 import enumerator.AREA;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import static java.net.HttpURLConnection.HTTP_VERSION;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.ws.Response;
-import model.Projeto;
-import org.omg.CORBA.Request;
 import org.xml.sax.SAXException;
 
 /**
- *
- * @author Sabrina Winckler
+ * 
+ * @author sabrina
+ * 
  */
 //Classe que faz a conexão com o servidor e requisição
 public class ClienteHttp {
@@ -47,15 +32,15 @@ public class ClienteHttp {
     private AREA area;
     private ArrayList listaProjetos;
     private ArrayList listaDeCursos;
-
-    //%%%% ATRIBUTOS PARA O T02 %%%//
+/**
+ * Atributos para o trabalho 02
+ */
     private ServerSocket server;
     private URL url;
     private HttpURLConnection conexao;
-
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    // MÉTODOS DEFAULT: construtor e getters             //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+/**
+ * método default, construtor getters
+ */
     public ClienteHttp() {
         this.listaProjetos = new ArrayList();
         this.listaDeCursos = new ArrayList();
@@ -68,21 +53,25 @@ public class ClienteHttp {
     public ArrayList getListaDeCursos() {
         return listaDeCursos;
     }
+    /**
+     * conexão ultilizando socket
+     * @throws IOException 
+     */
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    //     CONEXÃO UTILIZANDO Socket            //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     public void criarConexaoSocket() throws IOException {
         //Cria o socket com o host e porta que serão consultados
         this.client = new Socket("localhost", 80);
 
     }
+    /**
+     * requisição generica
+     * @param arquivo - define o caminho, nome e extensão do arquivo que deseja consultar no servidor.
+     * @return retorna uma lista de arquivos CSVs 
+     * @throws IOException Caso ele não consiga fazer a requisição, o método retorna uma exceção 
+     */
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    //          REQUISIÇÃO GENÉRICA             //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    public BufferedReader requisitar(String arquivo) throws IOException {
-        //Define requisição GET com o caminho para acessar o arquivo
+    public BufferedReader requisitar(String arquivo) throws IOException{
+    //Define requisição GET com o caminho para acessar o arquivo
         String requisicao = ""
                 + "GET /uniforma/" + arquivo + " HTTP/1.1\r\n"
                 + "Host: localhost\r\n"
@@ -100,7 +89,15 @@ public class ClienteHttp {
         BufferedReader infos = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
         return infos;
     }
-
+    /**
+     * 
+     * @param areaproj
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws URISyntaxException
+     * @throws ParseException 
+     */
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     REQUISIÇÃO DE NÍVEL INTERMEDIÁRIO     //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
@@ -113,7 +110,15 @@ public class ClienteHttp {
         this.listaProjetos = Leitor.montarListaProjeto(requisitar(arquivo), areaproj);
 
     }
-
+    /**
+     * 
+     * @return
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws URISyntaxException
+     * @throws ParseException 
+     */
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //      MÉTODO QUE MONTA O RESPONSE          //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
@@ -143,7 +148,15 @@ public class ClienteHttp {
 
         return response;
     }
-
+/**
+ * 
+ * @param campus
+ * @throws IOException
+ * @throws ParserConfigurationException
+ * @throws SAXException
+ * @throws URISyntaxException
+ * @throws ParseException 
+ */
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     REQUISIÇÃO DE NÍVEL AVANÇADO          //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
@@ -167,7 +180,10 @@ public class ClienteHttp {
         response += this.listaDeCursos.toString();
         return response;
     }
-
+/**
+ * 
+ * @throws IOException 
+ */
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     CONEXÃO UTILIZANDO HttpUrlConection  //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
