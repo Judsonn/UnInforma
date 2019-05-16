@@ -11,4 +11,18 @@ package enumerator;
  */
 public enum CAMPUS {
     ALEGRETE, BAGE, CACAPAVADOSUL, DOMPEDRITO, ITAQUI, JAGUARAO, LIVRAMENTO, SAOBORJA, SAOGABRIEL, URUGUAIANA, TODOS;
+    
+    public static boolean exists(String campus){
+        for (CAMPUS value : CAMPUS.values()) {
+            if (value.toString().equalsIgnoreCase(campus)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static String stringCAMPUS(){
+        String campus = "ALEGRETE, BAGE, CACAPAVADOSUL, DOMPEDRITO, ITAQUI, JAGUARAO, LIVRAMENTO, SAOBORJA, SAOGABRIEL, URUGUAIANA, TODOS";
+        return campus;
+    }
 }

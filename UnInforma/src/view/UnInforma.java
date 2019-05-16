@@ -10,6 +10,7 @@ import enumerator.CAMPUS;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,71 +49,66 @@ public class UnInforma {
     //     INICIALIZAÇÃO DO PROGRAMA            //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     private static void init() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
-        
+
         ClienteHttp cliente = new ClienteHttp();
-        String comandos;
-        Scanner c = new Scanner(System.in);
-
-        do {
-            System.out.println("   ===========================================================");
-            System.out.println("    |            ### BEM VINDO A UNINFORMA###              |");
-            System.out.println("    | Digite \\comandos para listar os comandos disponiveis |\n"
-                    +          "    |         ou digite \\sair para finalizar o programa    |\n");
-            System.out.println("     ========================= ================================\n");
-
-            comandos = c.next();
-            switch (comandos) {
-                case "\\comandos":
-                    comandos(cliente);
-                    break;
-                case "\\sair":
-                    System.out.println("Programa encerrado.");
-                    break;
-            }
-        } while (!comandos.equals("\\sair"));
+        System.out.println("    =========================================================\n");
+        System.out.println("    |        ### BEM VINDO A UNINFORMA - UNIPAMPA###        |");
+        System.out.println("    | Digite \\comandos para listar os comandos disponiveis |\n"
+                + "    |         ou digite \\sair para finalizar o programa    |\n");
+        System.out.println("    =========================================================\n");
+        opcoes(cliente);
 
     }
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     REQUISIÇÃO DE NÍVEL BÁSICO            //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    private static void comandos(ClienteHttp cliente) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+
+    private static void opcoes(ClienteHttp cliente) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String opcao;
         String curso;
-        
         Scanner op = new Scanner(System.in);
         Scanner cur = new Scanner(System.in);
+
         do {
-            System.out.println("   =======================================================================================");
-            System.out.println("    |                     ##LISTA DE COMANDOS DISPONÍVEIS##                             |\n");
-            System.out.println("    |      \\projetos -> Pesquisa e retorna todos os projetos existentes na universidade  |\n"
-                    +          "    |                  separando-os por seu tipo (pesquisa, extensão e ensino).         |\n");
-            System.out.println("    |      \\cursos_em <campus> ->  pesquisa e retorna os cursos disponíveis no campus   |\n"
-                    +          "    |                              passado como parâmetro.                              |");
-            System.out.println("    |      \\comandos -> lista os comandos disponiveis                                   |");
-            System.out.println("    |      \\voltar -> para voltar ao menu inicial                                        |");
-            System.out.println("     =====================================================================================\n");
+            System.out.println("    |            O QUE VOCÊ DESEJA SABER?               |");
             opcao = op.next();
             switch (opcao) {
                 case "\\comandos":
                     comandos(cliente);
                     break;
                 case "\\projetos":
-                  
                     System.out.println(cliente.dividirPorArea());
                     break;
                 case "\\cursos_em":
-                    System.out.println("\n Os campus existentes são: " + CAMPUS.values().toString());
+                    System.out.println("\n Os campus existentes são: " + CAMPUS.stringCAMPUS());
                     System.out.println("\n Digite o campus que deseja consultar: ");
                     curso = cur.next();
-                    System.out.println(cliente.mostrarCursos(curso.toLowerCase()));
+                    if (CAMPUS.exists(curso)) {
+                        System.out.println(cliente.mostrarCursos(curso.toLowerCase()));
+                    } else {
+                        System.out.println("Este Campus não existe.");
+                    }
                     break;
-                    case"\\voltar":
+                case "\\sair":
+                    System.out.println("Programa encerrado.");
                     break;
                 default:
                     System.out.println("Opcao invalida !!!");
             }
-        } while (!opcao.equals("\\voltar"));
-      
+        } while (!opcao.equals("\\sair"));
+
+    }
+
+    private static void comandos(ClienteHttp cliente) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+        System.out.println("   =======================================================================================");
+        System.out.println("    |                     ##LISTA DE COMANDOS DISPONÍVEIS##                              |\n");
+        System.out.println("    |      \\projetos -> Pesquisa e retorna todos os projetos existentes na universidade |\n"
+                + "    |       separando-os por seu tipo (pesquisa, extensão e ensino).                     |\n");
+        System.out.println("    |      \\cursos_em <campus> ->  pesquisa e retorna os cursos disponíveis no campus   |\n"
+                + "    |                              passado como parâmetro.                               |");
+        System.out.println("    |      \\comandos -> lista os comandos disponiveis                                   |");
+        System.out.println("    |      \\sair -> para encerrar o programa                                            |");
+        System.out.println("     =====================================================================================\n");
     }
 
 }

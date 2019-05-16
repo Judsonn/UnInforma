@@ -77,12 +77,12 @@ public class ClienteHttp {
         this.client = new Socket("localhost", 80);
 
     }
-    
+
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //          REQUISIÇÃO GENÉRICA             //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    public BufferedReader requisitar(String arquivo) throws IOException{
-    //Define requisição GET com o caminho para acessar o arquivo
+    public BufferedReader requisitar(String arquivo) throws IOException {
+        //Define requisição GET com o caminho para acessar o arquivo
         String requisicao = ""
                 + "GET /uniforma/" + arquivo + " HTTP/1.1\r\n"
                 + "Host: localhost\r\n"
@@ -100,7 +100,7 @@ public class ClienteHttp {
         BufferedReader infos = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
         return infos;
     }
-    
+
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //     REQUISIÇÃO DE NÍVEL INTERMEDIÁRIO     //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
@@ -110,22 +110,22 @@ public class ClienteHttp {
         //Limpa lista de projetos caso haja algum registro
         this.listaProjetos.removeAll(listaProjetos);
         //Chama método que monta a lista de projetos e adiciona na lista de projetos a partir da resposta da requisição
-        this.listaProjetos = Leitor.montarListaProjeto(requisitar(arquivo), areaproj);  
-      
+        this.listaProjetos = Leitor.montarListaProjeto(requisitar(arquivo), areaproj);
+
     }
+
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     //      MÉTODO QUE MONTA O RESPONSE          //
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     public String dividirPorArea() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String response = "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
-        
+
         response += "PROJETOS DE ENSINO: ";
         response += "\n ----------------------------------- \n";
         criarConexaoSocket();
         requisitarProjeto("ensino");//ensino
         response += this.listaProjetos.toString();
         response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
-        
 
         response += "PROJETOS DE EXTENSÃO: ";
         response += "\n ----------------------------------- \n";
@@ -158,8 +158,10 @@ public class ClienteHttp {
 
     }
     
-    public String mostrarCursos(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException{
-        String response = "\n\n O cursos disponíeveis em " + campus.toUpperCase() + " são: \n\n";
+    public String mostrarCursos(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+        String response = "\n ----------------------------------------------------------- \n";
+        response += "\n\n O cursos de graduação disponíeveis em " + campus.toUpperCase() + " são: \n\n";
+        response += "\n ----------------------------------------------------------- \n";
         criarConexaoSocket();
         requisitarCurso(campus);
         response += this.listaDeCursos.toString();
