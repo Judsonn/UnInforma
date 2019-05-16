@@ -23,7 +23,13 @@ public class Projeto implements Serializable{
 
     public Projeto() {
     }
-
+/**
+ * 
+ * @param campus
+ * @param descricao
+ * @param coordenador
+ * @param validade 
+ */
     public Projeto(String campus, String descricao, String coordenador, String validade) {
         this.campus = campus;
         this.descricao = descricao;
