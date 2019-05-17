@@ -42,7 +42,7 @@ public class ThreadConexao implements Runnable {
                 //cria uma requisicao a partir do InputStream do cliente
                 System.out.println(cliente.dividirPorArea());
                 System.out.println(cliente.mostrarCursos("alegrete"));
-                //ClienteHTTP requisicao = ClienteHTTP.requisitar(socket.getInputStream());
+                //RequisicaoHTTP requisicao = RequisicaoHTTP.lerRequisicao(socket.getInputStream());
                 //se a conexao esta marcada para se mantar viva entao seta keepalive e o timeout
 
                 //se o caminho foi igual a / entao deve pegar o /index.html
