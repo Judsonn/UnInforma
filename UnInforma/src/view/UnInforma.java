@@ -6,8 +6,11 @@
 package view;
 
 import controller.ClienteHttp;
+import controller.ThreadConexao;
 import enumerator.CAMPUS;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Scanner;
@@ -72,7 +75,7 @@ public class UnInforma {
     
     private static void opcoes(ClienteHttp cliente) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String opcao;
-        String curso;
+        String campus;
         Scanner op = new Scanner(System.in);
         Scanner cur = new Scanner(System.in);
 // loop de interação com o usuário, caso o usuário informe um comando errado, o programa vai invalidar a informação e vai fazer outra interação com o usuário. 
@@ -102,11 +105,14 @@ public class UnInforma {
                     }
                     break;
                //caso o usuário deseje sair do programa
+                case "\\campus":
+                    System.out.println("\n Os campus existentes são: " + CAMPUS.stringCAMPUS());
+                    break;
                 case "\\sair":
                     System.out.println("Programa encerrado.");
                     break;
                 default:
-                    System.out.println("Opcao invalida !!!");
+                    System.out.println(opcao);
             }
         } while (!opcao.equals("\\sair"));
 

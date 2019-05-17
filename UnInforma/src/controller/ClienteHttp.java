@@ -32,16 +32,17 @@ public class ClienteHttp {
     private AREA area;
     private ArrayList listaProjetos;
     private ArrayList listaDeCursos;
-/**
- * Atributos para o trabalho 02
- */
+    /**
+     * Atributos para o trabalho 02
+     */
     private ServerSocket server;
     private URL url;
     private HttpURLConnection conexao;
-/**
- * método default, construtor getters
- */
-    public ClienteHttp() {
+
+    /**
+     * método default, construtor getters
+     */
+    public ClienteHttp() throws IOException {
         this.listaProjetos = new ArrayList();
         this.listaDeCursos = new ArrayList();
     }
@@ -53,25 +54,39 @@ public class ClienteHttp {
     public ArrayList getListaDeCursos() {
         return listaDeCursos;
     }
-    /**
-     * conexão ultilizando socket
-     * @throws IOException 
-     */
 
+    public Socket getClient() {
+        return client;
+    }
+
+    public void setClient(Socket client) {
+        this.client = client;
+    }
+
+    /**
+     * CRIA conexão ultilizando socket
+     *
+     * @throws IOException - poderá lançar uma exceção que deve ou ser relançada
+     * ou capturada pelo método que a está chamando
+     */
     public void criarConexaoSocket() throws IOException {
         //Cria o socket com o host e porta que serão consultados
         this.client = new Socket("localhost", 80);
 
     }
-    /**
-     * requisição generica
-     * @param arquivo - define o caminho, nome e extensão do arquivo que deseja consultar no servidor.
-     * @return retorna uma lista de arquivos CSVs 
-     * @throws IOException Caso ele não consiga fazer a requisição, o método retorna uma exceção 
-     */
 
-    public BufferedReader requisitar(String arquivo) throws IOException{
-    //Define requisição GET com o caminho para acessar o arquivo
+    /**
+     * REQUISIÇÃO GENÉRICA
+     *
+     * @param arquivo - define o caminho, nome e extensão do arquivo que deseja
+     * consultar no servidor.
+     * @return retorna uma lista de arquivos CSVs
+     * @throws IOException Caso ele não consiga fazer a requisição, o método
+     * indica que este método poderá lançar uma exceção que deve ou ser
+     * relançada ou capturada pelo método que a está chamando
+     */
+    public BufferedReader requisitar(String arquivo) throws IOException {
+        //Define requisição GET com o caminho para acessar o arquivo
         String requisicao = ""
                 + "GET /uniforma/" + arquivo + " HTTP/1.1\r\n"
                 + "Host: localhost\r\n"
@@ -89,18 +104,21 @@ public class ClienteHttp {
         BufferedReader infos = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
         return infos;
     }
+
     /**
-     * 
-     * @param areaproj
-     * @throws IOException
-     * @throws ParserConfigurationException
+     * REQUISIÇÃO DE NÍVEL INTERMEDIÁRIO
+     *
+     * @param areaproj - define a área do projeto para fazer a consulta no
+     * servidor.
+     * @throws IOException -
+     * @throws ParserConfigurationException - Lança execeção de parser feito no
+     * leitor que deve ou ser relançada ou capturada pelo método que a está
+     * chamando
      * @throws SAXException
      * @throws URISyntaxException
-     * @throws ParseException 
+     * @throws ParseException - Lança execeção de parse feito no leitor que deve
+     * ou ser relançada ou capturada pelo método que a está chamando
      */
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    //     REQUISIÇÃO DE NÍVEL INTERMEDIÁRIO     //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     public void requisitarProjeto(String areaproj) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         //Define arquivo que será consultado
         String arquivo = "projeto" + areaproj + ".csv";
@@ -110,18 +128,17 @@ public class ClienteHttp {
         this.listaProjetos = Leitor.montarListaProjeto(requisitar(arquivo), areaproj);
 
     }
+
     /**
-     * 
-     * @return
+     * MÉTODO QUE MONTA O RESPONSE DIVIDINDO POR ÁREA OS PROJETOS
+     *
+     * @return respose em forma de string com projetos divididos por áreas
      * @throws IOException
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws URISyntaxException
-     * @throws ParseException 
+     * @throws ParseException
      */
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    //      MÉTODO QUE MONTA O RESPONSE          //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
     public String dividirPorArea() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String response = "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
 
@@ -148,18 +165,18 @@ public class ClienteHttp {
 
         return response;
     }
-/**
- * 
- * @param campus
- * @throws IOException
- * @throws ParserConfigurationException
- * @throws SAXException
- * @throws URISyntaxException
- * @throws ParseException 
- */
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    //     REQUISIÇÃO DE NÍVEL AVANÇADO          //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+
+    /**
+     * REQUISIÇÃO DE NÍVEL AVANÇADO
+     *
+     * @param campus - Parâmetro passado para pesquisar cursos no campus
+     * escolhido
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws URISyntaxException
+     * @throws ParseException
+     */
     public void requisitarCurso(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
 
         //Define arquivo e caminho que será consultado
@@ -170,23 +187,33 @@ public class ClienteHttp {
         this.listaDeCursos = Leitor.montarListaCurso(requisitar(arquivo), campus);
 
     }
-    
+
+    /**
+     * MÉTODO CHAMADO PARA MOSTRAR CURSOS DE GRADUAÇÃO E PÓS-GRADUAÇÃO
+     *
+     * @param campus - Parâmetro que recebe do usuário
+     * @return response com lista de cursos do campus escolhido
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws URISyntaxException
+     * @throws ParseException
+     */
     public String mostrarCursos(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String response = "\n ----------------------------------------------------------- \n";
-        response += "\n\n O cursos de graduação disponíeveis em " + campus.toUpperCase() + " são: \n\n";
+        response += "\n\n O cursos de graduação e pós-graducação disponíeveis em " + campus.toUpperCase() + " são: \n\n";
         response += "\n ----------------------------------------------------------- \n";
         criarConexaoSocket();
         requisitarCurso(campus);
         response += this.listaDeCursos.toString();
         return response;
     }
-/**
- * 
- * @throws IOException 
- */
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-    //     CONEXÃO UTILIZANDO HttpUrlConection  //
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+
+    /**
+     * CONEXÃO UTILIZANDO HttpUrlConection
+     *
+     * @throws IOException
+     */
     public void criarConexaoHttp() throws IOException {
 
         //URL do site que será consultado
