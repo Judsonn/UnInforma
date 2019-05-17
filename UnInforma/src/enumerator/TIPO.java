@@ -6,7 +6,7 @@
 package enumerator;
 
 /**
- *
+ *enum do tipo de graduação do curso.
  * @author Sabrina Winckler
  */
 public enum TIPO {

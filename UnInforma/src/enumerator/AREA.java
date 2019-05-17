@@ -6,8 +6,9 @@
 package enumerator;
 
 /**
- *
- * @author Sabrina Winckler
+ *Enum da area dos projetos.
+ * @author Judson e Sabrina
+ * @version 1.0
  */
 public enum AREA {
     PESQUISA, EXTENSAO, ENSINO;

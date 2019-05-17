@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 
 /**
  * 
- * @author sabrina
+ * @author Judson e Sabrina.
  * 
  */
 //Classe que faz a conexão com o servidor e requisição

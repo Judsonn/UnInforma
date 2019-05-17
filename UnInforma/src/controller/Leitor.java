@@ -18,7 +18,8 @@ import model.Projeto;
 
 /**
  *
- * @author Sabrina Winckler
+ * @author Judson e Sabrina
+ * @version 1.0
  */
 //Classe - Biblioteca que trata os dados que rebe do servidor
 public class Leitor {
@@ -28,11 +29,11 @@ public class Leitor {
     private static String cabecalho;
 /**
  * 
- * @param br
- * @param areaProj
- * @return
- * @throws ParseException
- * @throws IOException 
+ * @param br- ler o arquivo do servidor.
+ * @param areaProj - passa a area do projeto como parâmentro para ler.
+ * @return retorna uma lista de projetos
+ * @throws ParseException Tipo de exceção para problemas de análise, usado quando conteúdo que não está em conformidade com a sintaxe especificada.
+ * @throws IOException retorna uma exceção caso não consiga executar o médoto.
  */
     public static ArrayList montarListaProjeto(BufferedReader br, String areaProj) throws ParseException, IOException {
 
@@ -79,12 +80,10 @@ public class Leitor {
         return listaProjetos;
     }
 /**
- * 
- * @param br
- * @param campus
- * @return
- * @throws ParseException
- * @throws IOException 
+ * Método que monta a lista de curso;
+ * @param br - ler o arquivo do servidor.
+ * @param campus - passa o campus dos cursos como parâmentro para ler.
+ * @return retorna uma lista de cursos;
  */
     public static ArrayList montarListaCurso(BufferedReader br, String campus) throws ParseException, IOException {
 
@@ -137,15 +136,24 @@ public class Leitor {
 
         return listaCursos;
     }
-
+/**
+ * 
+ * @return retorna a quantidade de projetos
+ */
     public static int getQuantidadeProjetos() {
         return quantidadeProjetos;
     }
-
+/**
+ * 
+ * @return retorna a quantidade de cursos  
+ */
     public static int getQuantidadeCursos() {
         return quantidadeCursos;
     }
-
+/**
+ * 
+ * @return retorna o cabeçalho dos comandos.  
+ */
     public static String getCabecalho() {
         return cabecalho;
     }

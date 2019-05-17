@@ -6,8 +6,9 @@
 package enumerator;
 
 /**
- *
- * @author Sabrina Winckler
+ * enum da modalidade do comando de curso.
+ * @author Judson e Sabrina
+ * @version 1.0
  */
 public enum MODALIDADE {
     PRESENCIAL, SEMIPRESENCIAL, EAD, UAB;
