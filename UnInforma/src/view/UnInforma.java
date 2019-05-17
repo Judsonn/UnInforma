@@ -95,10 +95,10 @@ public class UnInforma {
                 case "\\cursos_em":
                     System.out.println("\n Os campus existentes são: " + CAMPUS.stringCAMPUS());
                     System.out.println("\n Digite o campus que deseja consultar: ");
-                    curso = cur.next();
+                    campus = cur.next();
                 // se o campus existe ele vai mostrar os cursos.
-                    if (CAMPUS.exists(curso)) {
-                        System.out.println(cliente.mostrarCursos(curso.toLowerCase()));
+                    if (CAMPUS.exists(campus)) {
+                        System.out.println(cliente.mostrarCursos(campus.toLowerCase()));
                 //caso contrário o campus não existe. 
                     } else {
                         System.out.println("Este Campus não existe.");
