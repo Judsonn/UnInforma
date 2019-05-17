@@ -20,7 +20,11 @@ import org.xml.sax.SAXException;
  */
 public class Teste {
     public static void main(String args[]){
-        ClienteHttp cliente = new ClienteHttp();
+        try {
+            ClienteHttp cliente = new ClienteHttp();
+        } catch (IOException ex) {
+            Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
+        }
        
     }
 }
