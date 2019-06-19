@@ -66,12 +66,13 @@ public class ClienteHttp {
     /**
      * CRIA conexão ultilizando socket
      *
+     * @param socket
      * @throws IOException - poderá lançar uma exceção que deve ou ser relançada
      * ou capturada pelo método que a está chamando
      */
-    public void criarConexaoSocket() throws IOException {
+    public void criarConexaoSocket(Socket socket) throws IOException {
         //Cria o socket com o host e porta que serão consultados
-        this.client = new Socket("localhost", 80);
+        this.client = socket;
 
     }
 
@@ -119,13 +120,15 @@ public class ClienteHttp {
      * @throws ParseException - Lança execeção de parse feito no leitor que deve
      * ou ser relançada ou capturada pelo método que a está chamando
      */
-    public void requisitarProjeto(String areaproj) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+    public String requisitarProjeto(String areaproj) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         //Define arquivo que será consultado
         String arquivo = "projeto" + areaproj + ".csv";
         //Limpa lista de projetos caso haja algum registro
         this.listaProjetos.removeAll(listaProjetos);
         //Chama método que monta a lista de projetos e adiciona na lista de projetos a partir da resposta da requisição
         this.listaProjetos = Leitor.montarListaProjeto(requisitar(arquivo), areaproj);
+        
+        return this.listaProjetos.toString();
 
     }
 
@@ -144,24 +147,28 @@ public class ClienteHttp {
 
         response += "PROJETOS DE ENSINO: ";
         response += "\n ----------------------------------- \n";
-        criarConexaoSocket();
-        requisitarProjeto("ensino");//ensino
-        response += this.listaProjetos.toString();
+        
+        response +=  requisitarProjeto("ensino");//ensino
+        //response += this.listaProjetos.toString();
         response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
 
-        response += "PROJETOS DE EXTENSÃO: ";
-        response += "\n ----------------------------------- \n";
-        criarConexaoSocket();
-        requisitarProjeto("extensao");//extensao
-        response += this.listaProjetos.toString();
-        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
-
-        response += "PROJETOS DE PESQUISA: ";
-        response += "\n ----------------------------------- \n";
-        criarConexaoSocket();
-        requisitarProjeto("pesquisa");//pesquisa
-        response += this.listaProjetos.toString();
-        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
+//        response += "PROJETOS DE EXTENSÃO: ";
+//        response += "\n ----------------------------------- \n";
+//        
+//        criarConexaoSocket(this.client);
+//        
+//        requisitarProjeto("extensao");//extensao
+//        response += this.listaProjetos.toString();
+//        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
+//
+//        response += "PROJETOS DE PESQUISA: ";
+//        response += "\n ----------------------------------- \n";
+//        
+//        criarConexaoSocket(this.client);
+//        
+//        requisitarProjeto("pesquisa");//pesquisa
+//        response += this.listaProjetos.toString();
+//        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
 
         return response;
     }
@@ -203,7 +210,7 @@ public class ClienteHttp {
         String response = "\n ----------------------------------------------------------- \n";
         response += "\n\n O cursos de graduação e pós-graducação disponíeveis em " + campus.toUpperCase() + " são: \n\n";
         response += "\n ----------------------------------------------------------- \n";
-        criarConexaoSocket();
+        //criarConexaoSocket();
         requisitarCurso(campus);
         response += this.listaDeCursos.toString();
         return response;
