@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.Scanner;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -41,7 +40,6 @@ public class Comandos {
      * @throws ParseException Tipo de exceção para problemas de análise, usado
      * quando conteúdo que não está em conformidade com a sintaxe especificada.
      */
-
     public static String init(Socket socket) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
 
         cliente = new ClienteHttp();
@@ -51,7 +49,7 @@ public class Comandos {
                 + "    | Digite \\comandos para listar os comandos disponiveis |\n"
                 + "    |         ou digite \\sair para finalizar o programa    |\n"
                 + "    =========================================================\n";
-        return response + "\n" + cliente.getClient().toString();
+        return response;
     }
 
     /**
@@ -79,25 +77,29 @@ public class Comandos {
 // loop de interação com o usuário, caso o usuário informe um comando errado, o programa vai invalidar a informação e vai fazer outra interação com o usuário. 
         do {
             opcao = mensagem;
-            switch (opcao) {
+            String[] arrayOpcao = opcao.split(" "); //Divide comando do parâmetro  
+            
+            switch (arrayOpcao[0]) {
                 //caso o usuário escolha comandos, o sistema vai lista o comandos disponíveis para o usuário
                 case "\\comandos":
                     return comandos();
                 //caso o usuário escolha o comando de projetos, o sistama vai executar o método dividirPorArea.
                 case "\\projetos":
-                    return cliente.dividirPorArea();
+                    return ClienteHttp.dividirPorArea();
                 //caso o usuário escolha o comando de cursos o sistema vai mostrar os campus existentes e vai pedir para escolher um campus e vai lista o campus para o usuário.
-                case "\\cursos_em":
-
-                    String[] arrayOpcao = opcao.split(" "); //Divide comando do parâmetro          
-                    campus = arrayOpcao[1];//Pega somente o parâmetro
-                    
-                    // se o campus existe ele vai mostrar os cursos.
-                    if (CAMPUS.exists(campus)) {
-                        return cliente.mostrarCursos(campus.toLowerCase());
-                        //caso contrário o campus não existe. 
+                case "\\cursos_em" :
+                    if (arrayOpcao.length > 1) {
+                        campus = arrayOpcao[1];//Pega somente o parâmetro   
+                        // se o campus existe ele vai mostrar os cursos.
+                        if (CAMPUS.exists(campus)) {
+                            System.out.println(campus);
+                            return ClienteHttp.mostrarCursos(campus.toLowerCase());
+                            //caso contrário o campus não existe. 
+                        } else {
+                            return "Este Campus não existe.";
+                        }
                     } else {
-                        return "Este Campus não existe.";
+                        return "Insira o parâmetro por favor!";
                     }
                 //caso o usuário deseje saber os campus existentes
                 case "\\campus":
@@ -120,10 +122,11 @@ public class Comandos {
                 + ("    |                     ##LISTA DE COMANDOS DISPONÍVEIS##                                   |\n")
                 + ("    |      \\projetos -> Pesquisa e retorna todos os projetos existentes na universidade      |\n"
                 + "             |  separando-os por seu tipo (pesquisa, extensão e ensino).                               |\n")
-                + ("    |      \\cursos_em  ->  pesquisa campus existentes e retorna, em seguida insira o <campus>|\n"
-                + "             |                        que deseja consultar.                                            |\n")
-                + ("    |      \\comandos -> lista os comandos disponiveis                                        |")
-                + ("    |      \\sair -> para encerrar o programa                                                 |")
+                + ("    |      \\cursos_em campus ->  pesquisa campus existentes e retorna, escolha o campus|\n"
+                + "             |                        que deseja consultar  e digite EX: \\cursos_em alegrete  |\n")
+                + ("    |      \\comandos -> lista os comandos disponiveis                                        |\n")
+                 + ("    |      \\campus -> lista os campus existentes                                       |\n")
+                + ("    |      \\sair -> para encerrar o programa                                                 |\n")
                 + ("     =====================================================================================\n");
         return response;
     }

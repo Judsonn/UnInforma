@@ -7,24 +7,65 @@ package controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author sabri
  */
-public class Server {
-    public static void main(String[] args) throws IOException {
+public class Server implements Runnable {
+    
+    private ServerSocket servidor;
+
+    public Server(int port) throws IOException {
+        servidor = new ServerSocket(port);
+    }
+    
+    public Server() {
+        
+    }
+    
+    public ServerSocket getServidor() {
+        return servidor;
+    }
+
+    public void setServidor(ServerSocket servidor) {
+        this.servidor = servidor;
+    }
+    
+//    public static void main(String[] args) throws IOException {
+//        /* cria um socket "servidor" associado a porta 8000
+//         já aguardando conexões
+//         */
+//        ServerSocket servidor = new ServerSocket(8000);
+//        ExecutorService pool = Executors.newFixedThreadPool(20);
+//
+//        while (true) {
+//            //cria uma nova thread para cada nova solicitacao de conexao
+//            pool.execute(new ThreadConexao(servidor.accept()));
+//        }
+//    }
+
+    @Override
+    public void run() {
         /* cria um socket "servidor" associado a porta 8000
          já aguardando conexões
          */
-        ServerSocket servidor = new ServerSocket(8000);
-        ExecutorService pool = Executors.newFixedThreadPool(20);
+        
+        try {
+            
+            ExecutorService pool = Executors.newFixedThreadPool(20);
 
-        while (true) {
-            //cria uma nova thread para cada nova solicitacao de conexao
-            pool.execute(new ThreadConexao(servidor.accept()));
+            while (true) {
+                //cria uma nova thread para cada nova solicitacao de conexao
+                pool.execute(new ThreadConexao(servidor.accept()));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

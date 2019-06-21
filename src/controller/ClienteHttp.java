@@ -7,9 +7,12 @@ package controller;
 
 import enumerator.AREA;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,30 +24,31 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ *
  * @author Judson e Sabrina.
- * 
+ *
  */
 //Classe que faz a conexão com o servidor e requisição
 public class ClienteHttp {
 
     private Socket client;
-    private AREA area;
-    private ArrayList listaProjetos;
-    private ArrayList listaDeCursos;
+    private static AREA area;
+    private static ArrayList listaProjetos;
+    private static ArrayList listaDeCursos;
     /**
      * Atributos para o trabalho 02
      */
-    private ServerSocket server;
-    private URL url;
+
     private HttpURLConnection conexao;
+    private static final String USER_AGENT = "Mozilla/5.0";
+    private static final String GET_URL = "http://localhost:8080/uniforma/";
 
     /**
      * método default, construtor getters
      */
     public ClienteHttp() throws IOException {
-        this.listaProjetos = new ArrayList();
-        this.listaDeCursos = new ArrayList();
+        listaProjetos = new ArrayList();
+        listaDeCursos = new ArrayList();
     }
 
     public ArrayList getListaProjetos() {
@@ -77,6 +81,8 @@ public class ClienteHttp {
     }
 
     /**
+     * CONEXÃO UTILIZANDO HttpUrlConection
+     *
      * REQUISIÇÃO GENÉRICA
      *
      * @param arquivo - define o caminho, nome e extensão do arquivo que deseja
@@ -86,24 +92,29 @@ public class ClienteHttp {
      * indica que este método poderá lançar uma exceção que deve ou ser
      * relançada ou capturada pelo método que a está chamando
      */
-    public BufferedReader requisitar(String arquivo) throws IOException {
-        //Define requisição GET com o caminho para acessar o arquivo
-        String requisicao = ""
-                + "GET /uniforma/" + arquivo + " HTTP/1.1\r\n"
-                + "Host: localhost\r\n"
-                + "\r\n";
+    static String requisitarGET(String arquivo) throws IOException {
+        URL url = new URL(GET_URL + arquivo + ".csv");
+        HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+        conexao.setRequestMethod("GET");
+        conexao.setRequestProperty("User-Agent", USER_AGENT);
+        int responseCode = conexao.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader infos = new BufferedReader(new InputStreamReader(
+                    conexao.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
 
-        //OutputStream serve para enviar a requisição, por isso o nome
-        OutputStream enviador = this.client.getOutputStream();
-        //Cria um vetor de bytes para enviar a requisição ao servidor
-        byte[] b = requisicao.getBytes();
-        //Escreve o vetor de bytes no enviador da requisição
-        enviador.write(b);
-        //Define finalização da escrita
-        enviador.flush();
-        //Define um BufferedReader para ler a partir do InputStream que vem do servidor
-        BufferedReader infos = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
-        return infos;
+            while ((inputLine = infos.readLine()) != null) {
+                response.append(inputLine).append("\n");
+            }
+            infos.close();
+
+            return response.toString();
+        } else {
+            System.out.println("Requisição GET  não funcionou");
+        }
+        return null;
     }
 
     /**
@@ -120,15 +131,15 @@ public class ClienteHttp {
      * @throws ParseException - Lança execeção de parse feito no leitor que deve
      * ou ser relançada ou capturada pelo método que a está chamando
      */
-    public String requisitarProjeto(String areaproj) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+    static String requisitarProjeto(String areaproj) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         //Define arquivo que será consultado
-        String arquivo = "projeto" + areaproj + ".csv";
+        String arquivo = "projeto" + areaproj;
         //Limpa lista de projetos caso haja algum registro
-        this.listaProjetos.removeAll(listaProjetos);
+        listaProjetos.removeAll(listaProjetos);
         //Chama método que monta a lista de projetos e adiciona na lista de projetos a partir da resposta da requisição
-        this.listaProjetos = Leitor.montarListaProjeto(requisitar(arquivo), areaproj);
-        
-        return this.listaProjetos.toString();
+        listaProjetos = Leitor.montarListaProjeto(requisitarGET(arquivo), areaproj);
+
+        return listaProjetos.toString();
 
     }
 
@@ -142,33 +153,25 @@ public class ClienteHttp {
      * @throws URISyntaxException
      * @throws ParseException
      */
-    public String dividirPorArea() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+    public static String dividirPorArea() throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String response = "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
 
         response += "PROJETOS DE ENSINO: ";
         response += "\n ----------------------------------- \n";
-        
-        response +=  requisitarProjeto("ensino");//ensino
-        //response += this.listaProjetos.toString();
+        response += requisitarProjeto("ensino");
         response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
 
-//        response += "PROJETOS DE EXTENSÃO: ";
-//        response += "\n ----------------------------------- \n";
-//        
-//        criarConexaoSocket(this.client);
-//        
-//        requisitarProjeto("extensao");//extensao
-//        response += this.listaProjetos.toString();
-//        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
-//
-//        response += "PROJETOS DE PESQUISA: ";
-//        response += "\n ----------------------------------- \n";
-//        
-//        criarConexaoSocket(this.client);
-//        
-//        requisitarProjeto("pesquisa");//pesquisa
-//        response += this.listaProjetos.toString();
-//        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
+        response += "PROJETOS DE EXTENSÃO: ";
+        response += "\n ----------------------------------- \n";
+
+        response += requisitarProjeto("extensao");
+        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
+
+        response += "PROJETOS DE PESQUISA: ";
+        response += "\n ----------------------------------- \n";
+
+        response += requisitarProjeto("pesquisa");
+        response += "\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n";
 
         return response;
     }
@@ -184,15 +187,15 @@ public class ClienteHttp {
      * @throws URISyntaxException
      * @throws ParseException
      */
-    public void requisitarCurso(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+    public static String requisitarCurso(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
 
         //Define arquivo e caminho que será consultado
-        String arquivo = "curso/" + campus + ".csv";
+        String arquivo = "curso/" + campus;
         //Limpa lista de cursos
-        this.listaDeCursos.removeAll(listaDeCursos);
+        listaDeCursos.removeAll(listaDeCursos);
         //Chama método que monta a lista de projetos e adiciona na lista de projetos a partir da resposta da requisição
-        this.listaDeCursos = Leitor.montarListaCurso(requisitar(arquivo), campus);
-
+        listaDeCursos = Leitor.montarListaCurso(requisitarGET(arquivo), campus);
+        return listaDeCursos.toString();
     }
 
     /**
@@ -206,31 +209,13 @@ public class ClienteHttp {
      * @throws URISyntaxException
      * @throws ParseException
      */
-    public String mostrarCursos(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+    public static String mostrarCursos(String campus) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
         String response = "\n ----------------------------------------------------------- \n";
         response += "\n\n O cursos de graduação e pós-graducação disponíeveis em " + campus.toUpperCase() + " são: \n\n";
         response += "\n ----------------------------------------------------------- \n";
-        //criarConexaoSocket();
-        requisitarCurso(campus);
-        response += this.listaDeCursos.toString();
+        response += requisitarCurso(campus);
+
         return response;
-    }
-
-    /**
-     * CONEXÃO UTILIZANDO HttpUrlConection
-     *
-     * @throws IOException
-     */
-    public void criarConexaoHttp() throws IOException {
-
-        //URL do site que será consultado
-        this.url = new URL("https://docs.google.com/spreadsheets/d/1-tA1_e8ePTrBOFSkIGym6C26mW2PZCZfinE5CHV38P4");
-
-        //O HttpUrlConnection class é usado para todos os tipos de requests: GET, POST, HEAD, OPTIONS, PUT, DELETE, TRACE.
-        this.conexao = (HttpURLConnection) url.openConnection();
-
-        //Define o método da conexão como GET
-        conexao.setRequestMethod("GET");
     }
 
 }
