@@ -1,9 +1,2 @@
-<<<<<<< Updated upstream
-/UnInforma/nbproject/private/
-=======
-/UnInforma/nbproject/private/
->>>>>>> Stashed changes
-/UnInforma/build/
-/UnInforma/dist/
-/Cliente/nbproject/private/
-/Cliente/build/
+/Servidor/build/
+/Servidor/nbproject/private/
