@@ -21,13 +21,22 @@ import java.util.concurrent.Executors;
  */
 public class MultiServer {
 
-    private static List servidores = new ArrayList();
+    private static List<Server> servidores = new ArrayList<Server>();
+    private static Server lider;
 
     public static List getServidores() {
         return servidores;
     }
 
     public static void main(String[] args) throws IOException {
+
+        lider = new Server(1224);
+        executarGrupo();
+        //executarSorteado();
+
+    }
+
+    public static void executarGrupo() throws IOException {
 
         ExecutorService pool = Executors.newFixedThreadPool(20);
         int[] port;
@@ -45,4 +54,69 @@ public class MultiServer {
         }
     }
 
+    public static int sorterarPortaCliente() {
+
+        int[] port;
+        port = new int[2];
+        port[0] = 8000;
+        port[1] = 80;
+
+        int escolhida = 0;
+
+        int num = (int) Math.floor(Math.random() * (10 - 2 + 1) + 2);
+        for (int i = 1; i < num; i++) {
+            if (num % i == 0) {
+                escolhida = port[0];
+                break;
+            }
+            if (num - i == 0) {
+                escolhida = port[1];
+                break;
+            }
+            if (num <= 7) {
+                escolhida = port[1];
+                break;
+            }
+            if (num >= 9) {
+                escolhida = port[0];
+                break;
+            }
+
+            escolhida = port[0];
+
+        }
+        return escolhida;
+    }
+
+    public static Server pegarServidor(int porta) {
+        for (Server server : servidores) {
+            if (server.getPorta() == porta) {
+                return server;
+            }
+        }
+        return null;
+    }
+
+    public static void executarSorteado() throws IOException {
+        ExecutorService pool = Executors.newFixedThreadPool(20);
+        int[] port;
+        port = new int[2];
+        port[0] = 8000;
+        port[1] = 80;
+
+        for (int i = 0; i < port.length; i++) {
+            //cria um novo server para cada porta de conexao
+            Server servidor = new Server(port[i]);
+            //Adiciona na listta de servidores rodando
+            servidores.add(servidor);
+
+        }
+
+        int porta = sorterarPortaCliente();
+        Server sorteado = pegarServidor(porta);
+        //Executa servidor
+        pool.execute(sorteado);
+        System.out.println(porta);
+
+    }
 }

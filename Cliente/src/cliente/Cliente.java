@@ -20,6 +20,14 @@ public class Cliente {
      */
     public static void main(String[] args) throws IOException {
 
+        int porta = sorterar();
+        Socket socket = new Socket("localhost", porta);
+        System.out.println("Conectado a porta: " + porta);
+        conectar(socket);
+    }
+    
+    public static int sorterar(){
+        
         int[] port;
         port = new int[2];
         port[0] = 8000;
@@ -28,7 +36,6 @@ public class Cliente {
         int escolhida = 0;
 
         int num = (int) Math.floor(Math.random() * (10 - 2 + 1) + 2);
-        System.out.println(num);
         for (int i = 1; i < num; i++) {
             if (num % i == 0) {
                 escolhida = port[0];
@@ -50,10 +57,7 @@ public class Cliente {
             escolhida = port[0];
 
         }
-
-        Socket socket = new Socket("localhost", escolhida);
-        System.out.println("Conectado a porta: " + escolhida);
-        conectar(socket);
+        return escolhida;
     }
 
     public static void conectar(Socket socket) throws IOException {

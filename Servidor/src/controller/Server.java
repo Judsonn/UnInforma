@@ -20,9 +20,11 @@ import java.util.logging.Logger;
 public class Server implements Runnable {
     
     private ServerSocket servidor;
+    private int porta;
 
     public Server(int port) throws IOException {
         servidor = new ServerSocket(port);
+        porta = port;
     }
     
     public Server() {
@@ -33,8 +35,13 @@ public class Server implements Runnable {
         return servidor;
     }
 
+    public int getPorta() {
+        return porta;
+    }
+    
     public void setServidor(ServerSocket servidor) {
         this.servidor = servidor;
+       
     }
     
 //    public static void main(String[] args) throws IOException {
@@ -52,8 +59,7 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        /* cria um socket "servidor" associado a porta 8000
-         já aguardando conexões
+        /* fica aguardando conexões
          */
         
         try {
@@ -68,4 +74,5 @@ public class Server implements Runnable {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 }
