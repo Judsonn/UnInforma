@@ -6,8 +6,8 @@
 package controller;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -22,8 +22,8 @@ public class Server implements Runnable {
     private ServerSocket servidor;
     private int porta;
 
-    public Server(int port) throws IOException {
-        servidor = new ServerSocket(port);
+    public Server(int port, InetAddress bindAddr) throws IOException {
+        servidor = new ServerSocket(port, 10, bindAddr);
         porta = port;
     }
     

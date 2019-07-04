@@ -6,8 +6,10 @@
 package cliente;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Random;
+import java.rmi.AccessException;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -18,12 +20,16 @@ public class Cliente {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, RemoteException, AccessException {
 
         int porta = sorterar();
-        Socket socket = new Socket("localhost", porta);
+        
+        InetAddress addr = InetAddress.getByName("localhost"); //localhost
+        Socket socket = new Socket(addr, porta);
+        
         System.out.println("Conectado a porta: " + porta);
         conectar(socket);
+        
     }
     
     public static int sorterar(){

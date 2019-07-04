@@ -6,7 +6,7 @@
 package controller;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +30,8 @@ public class MultiServer {
 
     public static void main(String[] args) throws IOException {
 
-        lider = new Server(1224);
+        InetAddress addr = InetAddress.getByName("localhost"); //localhost
+        lider = new Server(1224,addr);
         executarGrupo();
         //executarSorteado();
 
@@ -43,15 +44,25 @@ public class MultiServer {
         port = new int[2];
         port[0] = 8000;
         port[1] = 80;
-
+        InetAddress[] addr = generateEndIP();
+        
         for (int i = 0; i < port.length; i++) {
-            //cria um novo server para cada porta de conexao
-            Server servidor = new Server(port[i]);
+            //cria um novo server para cada porta de conexao e Adiciona endereço IP
+            Server servidor = new Server(port[i], addr[i]);
+                       
             //Adiciona na listta de servidores rodando
             servidores.add(servidor);
             //Executa servidor
             pool.execute(servidor);
         }
+    }
+    
+    
+    public static InetAddress[] generateEndIP() throws IOException {
+        InetAddress inet[] = new InetAddress[2];
+        inet[0] = InetAddress.getByName("127.0.0.1");    //Endereço do localhost do Xampp
+        inet[1] = InetAddress.getByName("10.2.243.196"); //Endereço Ipv4 da rede Eduroam
+        return inet;
     }
 
     public static int sorterarPortaCliente() {
@@ -97,26 +108,27 @@ public class MultiServer {
         return null;
     }
 
-    public static void executarSorteado() throws IOException {
-        ExecutorService pool = Executors.newFixedThreadPool(20);
-        int[] port;
-        port = new int[2];
-        port[0] = 8000;
-        port[1] = 80;
-
-        for (int i = 0; i < port.length; i++) {
-            //cria um novo server para cada porta de conexao
-            Server servidor = new Server(port[i]);
-            //Adiciona na listta de servidores rodando
-            servidores.add(servidor);
-
-        }
-
-        int porta = sorterarPortaCliente();
-        Server sorteado = pegarServidor(porta);
-        //Executa servidor
-        pool.execute(sorteado);
-        System.out.println(porta);
-
-    }
+//
+//    public static void executarSorteado() throws IOException {
+//        ExecutorService pool = Executors.newFixedThreadPool(20);
+//        int[] port;
+//        port = new int[2];
+//        port[0] = 8000;
+//        port[1] = 80;
+//
+//        for (int i = 0; i < port.length; i++) {
+//            //cria um novo server para cada porta de conexao
+//          //  Server servidor = new Server(port[i]);
+//            //Adiciona na listta de servidores rodando
+//        //    servidores.add(servidor);
+//
+//        }
+//
+//        int porta = sorterarPortaCliente();
+//        Server sorteado = pegarServidor(porta);
+//        //Executa servidor
+//        pool.execute(sorteado);
+//        System.out.println(porta);
+//
+//    }
 }
