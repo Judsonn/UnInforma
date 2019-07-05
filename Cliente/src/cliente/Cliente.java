@@ -48,41 +48,7 @@ public class Cliente {
         conectar(cliente);
 
     }
-
-    public static int sorterar() {
-
-        int[] port;
-        port = new int[2];
-        port[0] = 8000;
-        port[1] = 80;
-
-        int escolhida = 0;
-
-        int num = (int) Math.floor(Math.random() * (10 - 2 + 1) + 2);
-        for (int i = 1; i < num; i++) {
-            if (num % i == 0) {
-                escolhida = port[0];
-                break;
-            }
-            if (num - i == 0) {
-                escolhida = port[1];
-                break;
-            }
-            if (num <= 7) {
-                escolhida = port[1];
-                break;
-            }
-            if (num >= 9) {
-                escolhida = port[0];
-                break;
-            }
-
-            escolhida = port[0];
-
-        }
-        return escolhida;
-    }
-
+    
     public static void conectar(Socket socket) throws IOException {
         new ThreadInbox(socket).start(); //executa o metodo run() da classe ThreadInbox
         new ThreadCompose(socket).start(); //executa o metodo run() da classe ThreadCompose

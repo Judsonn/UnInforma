@@ -34,24 +34,32 @@ public class MultiServer {
 
     public static void main(String[] args) throws IOException {
 
+        //Cria o Servidor líder
         InetAddress addr = InetAddress.getByName("127.0.0.1"); //localhost
         lider = new Server(1224, addr);
+        
+        //Executa grupo de servidores "escravos"
         executarGrupo();
 
-        //Para aguardar conexões de clientes e alocá-los
-        while (true) {
+        //Mostra líder no servidor
+        System.out.println("LÍDER: "+ lider.getServidor().toString());
+        
+        boolean vivo = true;
+        
+        //Aguarda conexões de clientes e aloca-os
+        do {
             Socket socket = lider.getServidor().accept();
-            System.out.println(socket.toString());
-
+            
             OutputStream enviador = socket.getOutputStream();
             PrintWriter print = new PrintWriter(enviador, true);
 
             ServerSocket server = alocarCliente();
 
+            System.out.println("Cliente conectado à: " + server.getInetAddress() + " na porta " + server.getLocalPort());
             //Passa informações do servidor ao qual será alocado para o Cliente
             print.println(server.getInetAddress());
             print.println(server.getLocalPort());
-        }
+        }while(vivo);
 
     }
 
@@ -61,8 +69,8 @@ public class MultiServer {
         int[] port;
         port = new int[2];
         port[0] = 8000;
-        //  port[1] = 80;
-        InetAddress[] addr = generateEndIP();
+        port[1] = 80;
+        InetAddress[] addr = gerarEndIP();
 
         for (int i = 0; i < port.length; i++) {
             //cria um novo server para cada porta de conexao e Adiciona endereço IP
@@ -75,10 +83,13 @@ public class MultiServer {
         }
     }
 
-    public static InetAddress[] generateEndIP() throws IOException {
+    //Método que gera o endereço IP 
+    public static InetAddress[] gerarEndIP() throws IOException {
         InetAddress inet[] = new InetAddress[2];
-        inet[0] = InetAddress.getByName("127.0.0.1");     //Endereço do localhost do Xampp
-        // inet[1] = InetAddress.getByName("192.168.1.115"); //Endereço Ipv4 da rede Eduroam = 10.2.243.196
+        //Lista de endereços: 
+        //Endereço Ipv4 da rede de casa = 192.168.1.106, localhost do Xampp = 127.0.0.1, Ipv4 da rede Eduroam = 10.2.243.196 e VM = 192.168.56.1
+        inet[0] = InetAddress.getByName("192.168.1.106");
+        inet[1] = InetAddress.getByName("192.168.56.1"); 
         return inet;
     }
 
@@ -99,25 +110,27 @@ public class MultiServer {
 
         int num = (int) Math.floor(Math.random() * (10 - 2 + 1) + 2);
         for (int i = 1; i < num; i++) {
-            if (num % i == 0) {
-                escolhida = port[0];
-                break;
-            }
+//            if (num % i == 0) {
+//                escolhida = port[0];
+//                break;
+//            }
             if (num - i == 0) {
                 escolhida = port[1];
                 break;
             }
-            if (num <= 7) {
+            if (num <= 3) {
                 escolhida = port[1];
                 break;
             }
-            if (num >= 9) {
+            if (num + i == 10) {
                 escolhida = port[0];
                 break;
             }
-
+            if(num >= 6){
+                escolhida = port[0];
+                break;
+            }
             escolhida = port[0];
-
         }
         return escolhida;
     }

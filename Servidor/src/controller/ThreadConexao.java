@@ -38,9 +38,6 @@ public class ThreadConexao extends Thread {
     @Override
     public void run() {
         conectado = true;
-        //imprime na tela o IP do cliente
-        System.out.println(socket.getInetAddress());
-
         try {
 
             InputStream input = socket.getInputStream(); //cria um "leitor" para receber o que o usuário escreve
