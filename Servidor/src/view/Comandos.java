@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
  */
 public class Comandos {
 
-    private static ClienteHttp cliente;
+    private static long cliente;
 
     /**
      * Inicialização do programa
@@ -40,10 +40,9 @@ public class Comandos {
      * @throws ParseException Tipo de exceção para problemas de análise, usado
      * quando conteúdo que não está em conformidade com a sintaxe especificada.
      */
-    public static String init(Socket socket) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
-
-        cliente = new ClienteHttp();
-        cliente.criarConexaoSocket(socket);
+    public static String init(Socket socket, long client) throws IOException, ParserConfigurationException, SAXException, URISyntaxException, ParseException {
+        cliente = client;
+        ClienteHttp.criarSocket(socket, client);
         String response = "===========================\n"
                 + "    |        ### BEM VINDO A UNINFORMA - UNIPAMPA###        |"
                 + "    | Digite \\comandos para listar os comandos disponiveis |\n"
@@ -85,7 +84,7 @@ public class Comandos {
                     return comandos();
                 //caso o usuário escolha o comando de projetos, o sistama vai executar o método dividirPorArea.
                 case "\\projetos":
-                    return ClienteHttp.dividirPorArea();
+                    return ClienteHttp.dividirPorArea(cliente);
                 //caso o usuário escolha o comando de cursos o sistema vai mostrar os campus existentes e vai pedir para escolher um campus e vai lista o campus para o usuário.
                 case "\\cursos_em" :
                     if (arrayOpcao.length > 1) {
@@ -93,7 +92,7 @@ public class Comandos {
                         // se o campus existe ele vai mostrar os cursos.
                         if (CAMPUS.exists(campus)) {
                             System.out.println(campus);
-                            return ClienteHttp.mostrarCursos(campus.toLowerCase());
+                            return ClienteHttp.mostrarCursos(campus.toLowerCase(), cliente);
                             //caso contrário o campus não existe. 
                         } else {
                             return "Este Campus não existe.";

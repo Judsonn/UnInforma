@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,11 +29,10 @@ public class ThreadCompose extends Thread {
      * @param socket utiliza o socket criado do cliente para receber a resposta
      * do server
      */
-    public ThreadCompose(Socket socket) throws IOException { //construtor do WriteThread
-        this.socket = socket;
-
+    public ThreadCompose(Socket socketeleito) throws IOException { //construtor do ThreadCompose
+        this.socket = socketeleito;
         //recebe resposta do socket
-        OutputStream resposta = socket.getOutputStream(); 
+        OutputStream resposta = socketeleito.getOutputStream(); 
         print = new PrintWriter(resposta, true); //cria um escritor com a resposta
 
     }

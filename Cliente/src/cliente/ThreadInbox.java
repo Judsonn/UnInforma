@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,8 +21,8 @@ import java.net.Socket;
  */
 public class ThreadInbox extends Thread {
 
-    private BufferedReader br;
     private Socket socket;
+    private BufferedReader br;
 
     /**
      * método construtor da classe
@@ -26,13 +30,12 @@ public class ThreadInbox extends Thread {
      * @param socket utiliza o socket criado do cliente para enviar a resposta
      * do server
      */
-    public ThreadInbox(Socket socket) throws IOException { 
+    public ThreadInbox(Socket socketeleito) throws IOException {
+        this.socket = socketeleito;
         //Socket que o cliente está utilizando
-        this.socket = socket;
-
-        InputStream entrada = socket.getInputStream();
+        InputStream entrada = socketeleito.getInputStream();
         //armaneza entrada do cliente
-        br = new BufferedReader(new InputStreamReader(entrada)); 
+        br = new BufferedReader(new InputStreamReader(entrada));
 
     }
 
@@ -41,11 +44,16 @@ public class ThreadInbox extends Thread {
         while (true) {
             try {
                 //Lê linha recebida do servidor e mostra
-                String response = br.readLine(); 
+                String response = br.readLine();
                 System.out.println(response);
 
             } catch (IOException ex) {
                 System.out.println("Sua conexão foi encerrada");
+                try {
+                    this.socket.close();
+                } catch (IOException ex1) {
+                    Logger.getLogger(ThreadInbox.class.getName()).log(Level.SEVERE, null, ex1);
+                }
                 break;
             }
         }
