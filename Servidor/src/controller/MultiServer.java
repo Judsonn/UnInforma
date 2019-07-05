@@ -6,7 +6,11 @@
 package controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -30,10 +34,24 @@ public class MultiServer {
 
     public static void main(String[] args) throws IOException {
 
-        InetAddress addr = InetAddress.getByName("localhost"); //localhost
-        lider = new Server(1224,addr);
+        InetAddress addr = InetAddress.getByName("127.0.0.1"); //localhost
+        lider = new Server(1224, addr);
         executarGrupo();
-        //executarSorteado();
+
+        //Para aguardar conexões de clientes e alocá-los
+        while (true) {
+            Socket socket = lider.getServidor().accept();
+            System.out.println(socket.toString());
+
+            OutputStream enviador = socket.getOutputStream();
+            PrintWriter print = new PrintWriter(enviador, true);
+
+            ServerSocket server = alocarCliente();
+
+            //Passa informações do servidor ao qual será alocado para o Cliente
+            print.println(server.getInetAddress());
+            print.println(server.getLocalPort());
+        }
 
     }
 
@@ -43,26 +61,31 @@ public class MultiServer {
         int[] port;
         port = new int[2];
         port[0] = 8000;
-        port[1] = 80;
+        //  port[1] = 80;
         InetAddress[] addr = generateEndIP();
-        
+
         for (int i = 0; i < port.length; i++) {
             //cria um novo server para cada porta de conexao e Adiciona endereço IP
             Server servidor = new Server(port[i], addr[i]);
-                       
+
             //Adiciona na listta de servidores rodando
             servidores.add(servidor);
             //Executa servidor
             pool.execute(servidor);
         }
     }
-    
-    
+
     public static InetAddress[] generateEndIP() throws IOException {
         InetAddress inet[] = new InetAddress[2];
-        inet[0] = InetAddress.getByName("127.0.0.1");    //Endereço do localhost do Xampp
-        inet[1] = InetAddress.getByName("10.2.243.196"); //Endereço Ipv4 da rede Eduroam
+        inet[0] = InetAddress.getByName("127.0.0.1");     //Endereço do localhost do Xampp
+        // inet[1] = InetAddress.getByName("192.168.1.115"); //Endereço Ipv4 da rede Eduroam = 10.2.243.196
         return inet;
+    }
+
+    public static ServerSocket alocarCliente() {
+        int porta = sorterarPortaCliente();
+        Server server = pegarServidor(porta);
+        return server.getServidor();
     }
 
     public static int sorterarPortaCliente() {
@@ -108,27 +131,4 @@ public class MultiServer {
         return null;
     }
 
-//
-//    public static void executarSorteado() throws IOException {
-//        ExecutorService pool = Executors.newFixedThreadPool(20);
-//        int[] port;
-//        port = new int[2];
-//        port[0] = 8000;
-//        port[1] = 80;
-//
-//        for (int i = 0; i < port.length; i++) {
-//            //cria um novo server para cada porta de conexao
-//          //  Server servidor = new Server(port[i]);
-//            //Adiciona na listta de servidores rodando
-//        //    servidores.add(servidor);
-//
-//        }
-//
-//        int porta = sorterarPortaCliente();
-//        Server sorteado = pegarServidor(porta);
-//        //Executa servidor
-//        pool.execute(sorteado);
-//        System.out.println(porta);
-//
-//    }
 }

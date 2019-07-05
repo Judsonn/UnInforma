@@ -5,11 +5,16 @@
  */
 package cliente;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.rmi.AccessException;
 import java.rmi.RemoteException;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 
 /**
  *
@@ -22,18 +27,30 @@ public class Cliente {
      */
     public static void main(String[] args) throws IOException, RemoteException, AccessException {
 
-        int porta = sorterar();
-        
-        InetAddress addr = InetAddress.getByName("localhost"); //localhost
-        Socket socket = new Socket(addr, porta);
-        
-        System.out.println("Conectado a porta: " + porta);
-        conectar(socket);
-        
+        //Conecta ao servidor líder
+        InetAddress addr = InetAddress.getByName("127.0.0.1");
+        Socket lider = new Socket(addr, 1224);
+
+        //Aguarda informações do servidor líder
+        InputStream entrada = lider.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(entrada));
+        //Recebe endereço ip e porta ao qual será alocado
+        String ip = br.readLine();
+        int porta = Integer.parseInt(br.readLine());
+        //Quebra string do endereço IP
+        String[] strIP = ip.split("/");
+        InetAddress end = InetAddress.getByName(strIP[1]);
+        //Fecha socket do líder neste cliente
+        lider.close();
+        //Cria socket com IP e porta do servidor que recebeu para o cliente utilizar
+        Socket cliente = new Socket(end, porta);
+        //Conecta cliente à sua thread no servidor
+        conectar(cliente);
+
     }
-    
-    public static int sorterar(){
-        
+
+    public static int sorterar() {
+
         int[] port;
         port = new int[2];
         port[0] = 8000;
