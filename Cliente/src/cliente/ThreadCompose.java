@@ -26,29 +26,31 @@ public class ThreadCompose extends Thread {
     /**
      * construtor da classe
      *
-     * @param socket utiliza o socket criado do cliente para receber a resposta
-     * do server
+     * @param socket para enviar mensagem ao sever
+     * 
      */
     public ThreadCompose(Socket socketeleito) throws IOException { //construtor do ThreadCompose
         this.socket = socketeleito;
-        //recebe resposta do socket
-        OutputStream resposta = socketeleito.getOutputStream(); 
-        print = new PrintWriter(resposta, true); //cria um escritor com a resposta
+        //recebe mensagem do socket
+        OutputStream mensagem = socketeleito.getOutputStream(); 
+        //cria um escritor para a mensagem
+        print = new PrintWriter(mensagem, true); 
 
     }
 
     @Override
     public void run() {
         try {
+            //Recebe informações digitadas no console pelo cliente
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
             String msgEntrada;
 
             do {
-                msgEntrada = br.readLine(); //
+                //Le mensagem a ser enviada ao servidor e envia através do print
+                msgEntrada = br.readLine(); 
                 print.println(msgEntrada);
 
-            } while (!msgEntrada.equalsIgnoreCase("\\sair"));
+            } while (!msgEntrada.equalsIgnoreCase("\\sair"));//Enquanto o usuário não sair
 
             socket.close();
             

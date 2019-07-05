@@ -27,14 +27,14 @@ public class ThreadInbox extends Thread {
     /**
      * método construtor da classe
      *
-     * @param socket utiliza o socket criado do cliente para enviar a resposta
-     * do server
+     * @param socket envia GET response para o cliente
+     * 
      */
     public ThreadInbox(Socket socketeleito) throws IOException {
         this.socket = socketeleito;
         //Socket que o cliente está utilizando
         InputStream entrada = socketeleito.getInputStream();
-        //armaneza entrada do cliente
+        //armaneza entrada do sever
         br = new BufferedReader(new InputStreamReader(entrada));
 
     }

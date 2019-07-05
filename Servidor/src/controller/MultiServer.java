@@ -34,8 +34,9 @@ public class MultiServer {
     }
 
     public static void main(String[] args) throws IOException {
-
+        //Scanner para setar endereços ip dos servidores
         Scanner sc = new Scanner(System.in);
+        
         System.out.println("Por favor informe o IP do servidor líder: ");
         String ipLider = sc.next();
         //Cria o Servidor líder
@@ -70,9 +71,12 @@ public class MultiServer {
 
     }
 
+    //Método que executa grupo de servidores 
     public static void executarGrupo(String ip1, String ip2) throws IOException {
 
         ExecutorService pool = Executors.newFixedThreadPool(20);
+        
+        //Armazena portas em um vetor
         int[] port;
         port = new int[2];
         port[0] = 8000;
@@ -92,6 +96,8 @@ public class MultiServer {
 
     //Método que gera o endereço IP 
     public static InetAddress[] gerarEndIP(String ip1, String ip2) throws IOException {
+        
+        //Armazena Ips em um vetor
         InetAddress inet[] = new InetAddress[2];
         //Lista de endereços: 
         //Endereço Ipv4 da rede de casa = 192.168.1.106, localhost do Xampp = 127.0.0.1, Ipv4 da rede Eduroam = 10.2.243.196 e VM = 192.168.56.1
@@ -100,12 +106,14 @@ public class MultiServer {
         return inet;
     }
 
+    //Método que aloca o cliente
     public static ServerSocket alocarCliente() {
         int porta = sorterarPortaCliente();
         Server server = pegarServidor(porta);
         return server.getServidor();
     }
-
+    
+//Método que sorteia a porta do cliente
     public static int sorterarPortaCliente() {
 
         int[] port;
@@ -114,13 +122,12 @@ public class MultiServer {
         port[1] = 80;
 
         int escolhida = 0;
-
+        
+        //Número randomico  para sorteio de porta
         int num = (int) Math.floor(Math.random() * (10 - 2 + 1) + 2);
+        //Itera sobre num randomico
         for (int i = 1; i < num; i++) {
-//            if (num % i == 0) {
-//                escolhida = port[0];
-//                break;
-//            }
+            //Condições para a escolha da porta!
             if (num - i == 0) {
                 escolhida = port[1];
                 break;
@@ -139,9 +146,11 @@ public class MultiServer {
             }
             escolhida = port[0];
         }
+        //Retorna porta sorteada
         return escolhida;
     }
 
+    //Pega servidor a partir da porta sorteada
     public static Server pegarServidor(int porta) {
         for (Server server : servidores) {
             if (server.getPorta() == porta) {

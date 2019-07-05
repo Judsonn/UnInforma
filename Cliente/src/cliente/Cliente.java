@@ -50,8 +50,10 @@ public class Cliente {
     }
     
     public static void conectar(Socket socket) throws IOException {
-        new ThreadInbox(socket).start(); //executa o metodo run() da classe ThreadInbox
-        new ThreadCompose(socket).start(); //executa o metodo run() da classe ThreadCompose
+         //executa o metodo run() da classe ThreadInbox
+        new ThreadInbox(socket).start();
+        //executa o metodo run() da classe ThreadCompose
+        new ThreadCompose(socket).start(); 
     }
 
 }
