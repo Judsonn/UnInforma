@@ -1,4 +1,4 @@
-UnInforma
+﻿UnInforma
 
 Bot Server - Engenharia de Software
 
@@ -21,3 +21,11 @@ Uso
 O usuário atráves do Cliente deverá informar um comando iniciando com “\” (backslash) para que o servidor possa identificar cada caso.
 
 Caso o usuário envie uma mensagem sem o caractere “\”, este servidor irá apenas repetir a mensagem para o cliente, sem efetuar nenhuma ação adicional.
+
+
+**PORTAS E IPS**
+O Servidor de Informação está em localhost:8080
+O IP do Servidor Líder está definido de acordo com o endereço IP do localhost
+Os IPs do grupo de Servidores estão definidos de acordo com a rede a qual a máquina está concectada e de acordo com uma (ou mais) máquinas virtuais com IPs distintos.
+As portas utilizadas nos servidores são portas públicas, neste projeto foram utilzadas as portas: 8000 e 80.
+

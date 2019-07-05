@@ -1,0 +1,1 @@
+Clone a pasta "uniforma" para a pasta do seu localhost e todos os dados da API estarão no seu localhost!
