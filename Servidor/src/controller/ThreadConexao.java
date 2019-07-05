@@ -19,7 +19,9 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,7 +34,7 @@ public class ThreadConexao extends Thread {
     private boolean conectado;
 //    private final Server server;
     private PrintWriter print;
-    private List<Long> cliente = new ArrayList<>();
+    private static final Map<Long, Socket> mapaClientes = new HashMap();
 
     public ThreadConexao(Socket socket) {
         this.socket = socket;
@@ -41,8 +43,7 @@ public class ThreadConexao extends Thread {
     @Override
     public void run() {
         conectado = true;
-
-        this.cliente.add(this.getId());
+        mapaClientes.put(this.getId(), socket);
         System.out.println("Cliente " + this.getId() + " conectado à: " + socket.getInetAddress() + " na porta " + socket.getLocalPort());
         try {
             InputStream input = socket.getInputStream(); //cria um "leitor" para receber o que o usuário escreve
@@ -51,29 +52,32 @@ public class ThreadConexao extends Thread {
             OutputStream enviador = socket.getOutputStream(); //receptor para o que foi escrito
             print = new PrintWriter(enviador, true); //cria um PrintWriter para printar os dados recebidos do servidor
 
-            print.println(Comandos.init(socket, this.getId()));
-            
+            Long userId = this.getId();
             String clientMessage;
-            
-            ClienteHttp.pegarClientes().get(this.getId());
-            for(Long client: ClienteHttp.pegarClientes().keySet()){
-                if(socket.getLocalAddress().equals(client)){
-                    System.out.println(this.getId());
+            if (socket.equals(mapaClientes.get(this.getId()))) {
+                userId = this.getId();
+                print.println(Comandos.init(socket, this.getId()));
+            } else {
+                for (Long user : mapaClientes.keySet()) {
+                    if (mapaClientes.get(user).equals(socket)) {
+                        userId = user;
+                        print.println(Comandos.init(socket, this.getId()));
+                    }
                 }
             }
 
             while (conectado) {
                 clientMessage = reader.readLine(); //recebe do cliente o que foi digitado
-                System.out.println(clientMessage); //printa no console do servidor a mensagem recebida
-
+                System.out.println("[ Comando recebido: " + clientMessage); //printa no console do servidor a mensagem recebida
+                System.out.println(" Cliente: "+userId+"\n Servidor no IP: " + mapaClientes.get(userId).getLocalAddress() + " \n Porta: "+ mapaClientes.get(userId).getLocalPort());
                 print.println(Comandos.opcoes(clientMessage));
 
                 if (clientMessage.equalsIgnoreCase("\\sair")) {
                     conectado = false;
                     this.socket.close();
-                    this.cliente.remove(this.getId());
+                    mapaClientes.remove(this.getId());
                     print.println("Programa Encerrado");
-                    System.out.println("Um cliente se desconectou! " + "\n Clientes conectados: " + this.cliente.toString());
+                    System.out.println("Um cliente se desconectou! " + "\n Clientes conectados: " + mapaClientes.toString());
                 }
 
             }

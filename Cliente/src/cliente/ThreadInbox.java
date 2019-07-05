@@ -53,8 +53,11 @@ public class ThreadInbox extends Thread {
                     this.socket.close();
                 } catch (IOException ex1) {
                     Logger.getLogger(ThreadInbox.class.getName()).log(Level.SEVERE, null, ex1);
+                } catch (Throwable ex1) {
+                    Logger.getLogger(ThreadInbox.class.getName()).log(Level.SEVERE, null, ex1);
                 }
                 break;
+                
             }
         }
     }

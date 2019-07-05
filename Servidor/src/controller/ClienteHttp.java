@@ -39,7 +39,7 @@ public class ClienteHttp {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String GET_URL = "http://localhost:8080/uniforma/";
 
-    private static final Map <Long,Socket> mapaClientes = new HashMap();
+    
 
     public ArrayList getListaProjetos() {
         return listaProjetos;
@@ -58,7 +58,7 @@ public class ClienteHttp {
      */
     public static void criarSocket(Socket socket, long cliente) throws IOException {
         //Cria o socket com o host e porta que serão consultados
-        mapaClientes.put(cliente, socket);
+       
 
     }
 
@@ -80,7 +80,7 @@ public class ClienteHttp {
         conexao.setRequestMethod("GET");
         conexao.setRequestProperty("User-Agent", USER_AGENT);
         int responseCode = conexao.getResponseCode();
-        System.out.println("[ Cliente: "+cliente+"\n Servidor no IP: " + mapaClientes.get(cliente).getLocalAddress() + " \n Porta: "+ mapaClientes.get(cliente).getLocalPort() +" GET Response Code :: " + responseCode +" ]");
+        System.out.println(" GET Response Code :: " + responseCode +" ]");
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader infos = new BufferedReader(new InputStreamReader(
                     conexao.getInputStream()));
@@ -94,7 +94,7 @@ public class ClienteHttp {
 
             return response.toString();
         } else {
-            System.out.println("[ Servidor no IP: " + mapaClientes.get(cliente).getInetAddress() + " \n Porta: "+ mapaClientes.get(cliente).getPort() +" Requisição GET  não funcionou ]");
+            System.out.println(" Requisição GET  não funcionou ]");
         }
         return null;
     }
@@ -200,8 +200,4 @@ public class ClienteHttp {
         return response;
     }
 
-    public static Map<Long, Socket> pegarClientes(){
-        System.out.println("Clientes conectados: " + mapaClientes.toString());
-        return mapaClientes;
-    }
 }

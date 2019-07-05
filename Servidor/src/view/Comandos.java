@@ -44,7 +44,7 @@ public class Comandos {
         cliente = client;
         ClienteHttp.criarSocket(socket, client);
         String response = "===========================\n"
-                + "    |        ### BEM VINDO A UNINFORMA - UNIPAMPA###        |"
+                + "    |        ### BEM VINDO A UNINFORMA - UNIPAMPA###        |\n"
                 + "    | Digite \\comandos para listar os comandos disponiveis |\n"
                 + "    |         ou digite \\sair para finalizar o programa    |\n"
                 + "    =========================================================\n";
@@ -91,7 +91,6 @@ public class Comandos {
                         campus = arrayOpcao[1];//Pega somente o parâmetro   
                         // se o campus existe ele vai mostrar os cursos.
                         if (CAMPUS.exists(campus)) {
-                            System.out.println(campus);
                             return ClienteHttp.mostrarCursos(campus.toLowerCase(), cliente);
                             //caso contrário o campus não existe. 
                         } else {
