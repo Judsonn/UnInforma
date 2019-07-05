@@ -36,12 +36,13 @@ public class MultiServer {
     public static void main(String[] args) throws IOException {
         //Scanner para setar endereços ip dos servidores
         Scanner sc = new Scanner(System.in);
-        
-        System.out.println("Por favor informe o IP do servidor líder: ");
-        String ipLider = sc.next();
-        //Cria o Servidor líder
-        InetAddress addr = InetAddress.getByName(ipLider); //localhost
+        //Cria o Servidor líder que precisa estar no mesmo IP e Porta que o clinte "burro" vai acessar inicialmente, neste caso o localhost
+        InetAddress addr = InetAddress.getByName("127.0.0.1"); 
         lider = new Server(1224, addr);
+        
+        
+        //Mostra líder no servidor
+        System.out.println("LÍDER: "+ lider.getServidor().toString());
         
         System.out.println("Por favor informe o IP do servidor 1: ");
         String ip1 = sc.next();
@@ -51,8 +52,6 @@ public class MultiServer {
         //Executa grupo de servidores "escravos"
         executarGrupo(ip1, ip2);
 
-        //Mostra líder no servidor
-        System.out.println("LÍDER: "+ lider.getServidor().toString());
         
         boolean vivo = true;
         
