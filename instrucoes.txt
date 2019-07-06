@@ -4,3 +4,7 @@ O Servidor de Informação está em localhost:8080
 O IP do Servidor Líder está definido de acordo com o endereço IP do localhost
 Os IPs do grupo de Servidores estão definidos de acordo com a rede a qual a máquina está concectada e de acordo com uma (ou mais) máquinas virtuais com IPs distintos.
 As portas utilizadas nos servidores são portas públicas, neste projeto foram utilzadas as portas: 8000 e 80.
+
+Executar MultiServer e definir ips dos escravos.
+
+Em seguida é só executar o Cliente!
